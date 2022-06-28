@@ -1,11 +1,11 @@
 let Colors={
     //Tema
-    Primary:'#1f1f1f',
+    Primary:'#424242',
     Accent:'#00a9a4',
     //Colores del semaforo
-    Red:'#f44336',
+    Red:'#a41626',
     Yellow:'#ffb72e',
-    Green:'#009688',
+    Green:'#00a9a4',
     Black:'#000000'
 }
 

@@ -11,6 +11,15 @@ export const OperationsSchema = yup.object({
     categoria: yup
       .string('Seleccione una categoría')
       .required('Por favor seleccione una opción'),
+    account: yup
+      .string('Seleccione la cuenta a la que pertenece esta operación')
+      .required('Por favor seleccione una opción'),
+    fecha: yup
+      .string('Seleccione la fecha de esta operación')
+      .required('Por favor seleccione una fecha'),
+    fecha: yup
+      .string('Seleccione la hora de esta operación')
+      .required('Por favor seleccione una hora'),
     descripcion: yup
       .string('Escriba una descripcion')
       .required('Este campo es requerido')

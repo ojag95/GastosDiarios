@@ -47,7 +47,6 @@ export const showAllTables = async () => {
             console.log('[Error] No fue posible abrir la base de datos ' + error);
         }
     });
-
 }
 
 
@@ -67,6 +66,10 @@ export const createDatabase = async () => {
     {
         name: 'info',
         query: 'create table if not exists info (id integer primary key not null, version text);'
+    },
+    {
+        name: 'movement',
+        query: 'create table if not exists movement (id integer primary key not null, account integer,cantidad real,categoria integer,descripcion text,fecha text,hora text,tipo text);'
     }
     ];
 
@@ -80,7 +83,7 @@ export const createDatabase = async () => {
                     tx => {
                         tx.executeSql(table.query, [], (_, { rows }) => {
                             resolve({ table: table.name, executed: true });
-                        }
+                        },(error=>console.log(error))
                         );
                     },
                     null,
@@ -108,6 +111,7 @@ export const createDatabase = async () => {
  */
 export const executeSQL = async (query, values) => {
     const db = openDatabase();
+    console.log('[LOG] Ejecutando query:',query)
     return new Promise(resolve => {
         try {
             db.transaction(
@@ -116,7 +120,7 @@ export const executeSQL = async (query, values) => {
                         console.log(JSON.stringify(rows))
                         resolve(rows._array);
                     }
-                    );
+                    ),(txObj, error) => console.log('Error ', error);
                 },
                 null,
                 null

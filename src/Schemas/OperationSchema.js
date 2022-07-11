@@ -7,17 +7,17 @@ export const OperationsSchema = yup.object({
       .matches(/^[+-]?\d*(?:[.]\d*)?$/,'El valor ingresado no es un numero valido'),
     tipo: yup
       .string('Seleccione un tipo de operación')
-      .required('Este campo es requerido'),
+      .required('Por favor seleccione un tipo de movimiento'),
     categoria: yup
       .string('Seleccione una categoría')
-      .required('Por favor seleccione una opción'),
+      .required('Por favor seleccione una categoría'),
     account: yup
       .string('Seleccione la cuenta a la que pertenece esta operación')
-      .required('Por favor seleccione una opción'),
+      .required('Por favor seleccione una cuenta'),
     fecha: yup
       .string('Seleccione la fecha de esta operación')
       .required('Por favor seleccione una fecha'),
-    fecha: yup
+    hora: yup
       .string('Seleccione la hora de esta operación')
       .required('Por favor seleccione una hora'),
     descripcion: yup

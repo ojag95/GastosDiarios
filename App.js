@@ -7,7 +7,8 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { useEffect } from 'react';
 import { createDatabase, insertBaseCategories, obtenerValoresCategory, showAllTables } from './src/Utils/Database/Database';
 import { addBaseCategories, consultCategories } from './src/DataProvider/Category';
-import { addBaseAccounts } from './src/DataProvider/Accounts';
+import { addBaseAccounts, consultAccounts } from './src/DataProvider/Accounts';
+import { consultAllMovements } from './src/DataProvider/Movements';
 
 export default function App() {
 
@@ -27,8 +28,10 @@ export default function App() {
     console.log(result)
     let resultAccount= await addBaseAccounts()
     let resultCategories= await addBaseCategories()
+    let accounts=await consultAccounts()
     let category=await consultCategories()
     console.log('CATEGORIAS',category)
+    console.log('Accounts',accounts)
     
 
   }

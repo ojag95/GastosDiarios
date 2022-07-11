@@ -3,7 +3,8 @@ import React from 'react'
 import { Caption, Subheading, Surface, Title, TouchableRipple, withTheme ,Text,} from 'react-native-paper'
 import Colors from '../Constants/Colors';
 
-const OperationsCard = ({theme}) => {
+const OperationsCard = ({theme,data}) => {
+    const {account,cantidad,categoria,descripcion,fecha,hora,tipo}=data;
     const {colors}=theme;
     return (
         <TouchableRipple
@@ -13,18 +14,16 @@ const OperationsCard = ({theme}) => {
             style={styles.rippleContainer}
         >
             <Surface style={styles.card}>
-
-                <View style={styles.operationIndicator} />
+                <View style={[styles.operationIndicator, tipo==='Ingreso'?{backgroundColor: Colors.Green}:{backgroundColor: Colors.Red}]} />
                 <View style={styles.container}>
                     <View style={styles.operationDetails}>
-                        <Subheading>Efectivo</Subheading>
-                        <Text style={{fontWeight:'600'}}>Sueldo</Text>
-                        <Text numberOfLines={1}>Esta es la descripción del movimientojajajajajjajajja</Text>
-                        <Caption numberOfLines={1}>24 de Junio 2022 1:15PM</Caption>
-
+                        <Subheading>Cuenta {account}</Subheading>
+                        <Text style={{fontWeight:'bold'}}>{categoria}</Text>
+                        <Text numberOfLines={1}>{descripcion}</Text>
+                        <Caption numberOfLines={1}>{fecha} {hora}</Caption>
                     </View>
                     <View style={styles.operationAmount}>
-                        <Title numberOfLines={1}>$450000</Title>
+                        <Title numberOfLines={1}>{tipo==='Ingreso'?'+':'-'}${cantidad}</Title>
                     </View>
                 </View>
             </Surface>
@@ -42,7 +41,6 @@ const styles = StyleSheet.create({
     operationIndicator: {
         height: 105,
         width: 12,
-        backgroundColor: Colors.Green,
         marginRight: 10
     },
     container: {

@@ -1,17 +1,18 @@
-import { ScrollView, StyleSheet, Text, View, Keyboard } from 'react-native'
+import { ScrollView, StyleSheet, View, Keyboard, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Appbar, Button, TextInput, HelperText, IconButton, Modal } from 'react-native-paper'
+import { Appbar, Button, TextInput, HelperText, IconButton, Modal, Divider, Subheading, TouchableRipple } from 'react-native-paper'
 import { Formik } from 'formik';
 import { OperationsSchema } from '../../Schemas/OperationSchema';
 import DropDown from "react-native-paper-dropdown";
 import Calculator from '../../Components/Calculator';
-import { obtenerValoresCategory } from '../../Utils/Database/Database';
 import { consultCategories } from '../../DataProvider/Category';
 import { consultAccounts } from '../../DataProvider/Accounts';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat'
 import 'dayjs/locale/es-mx' // ES 2015 
+import { insertMovement } from '../../DataProvider/Movements';
+import ImagePickerGallery from '../../Components/ImagePickerGallery';
+
 
 dayjs.locale('es-mx')
 
@@ -25,6 +26,12 @@ const AddOperationScreen = ({ navigation, route }) => {
     const [date, setDate] = useState(new Date())
     const [visibleDatePicker, setVisibleDatePicker] = useState(false)
     const [datePickerMode, setDatePickerMode] = useState('date')
+    const [pictures, setPictures] = useState([{uri:'https://picsum.photos/600'},{uri:'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4'},{
+        uri: "https://images.unsplash.com/photo-1573273787173-0eb81a833b34",
+      },
+      {
+        uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
+      },])
     const typeList = [{
         label: 'Ingreso',
         value: 'Ingreso'
@@ -88,10 +95,10 @@ const AddOperationScreen = ({ navigation, route }) => {
         return resultTime
     }
 
-
-
-    const handleDateFormat = () => {
-
+    const handleSubmit = async (account, cantidad, categoria, descripcion, fecha, hora, tipo) => {
+        let result = await insertMovement(account, cantidad, categoria, descripcion, fecha, hora, tipo)
+        console.log(result)
+        navigation.goBack()
     }
 
     const hideModal = () => setVisible(false);
@@ -107,12 +114,12 @@ const AddOperationScreen = ({ navigation, route }) => {
                 <ScrollView contentContainerStyle={{ padding: 10 }}>
                     <Formik
                         initialValues={{ cantidad: '', tipo: '', categoria: '', descripcion: '', account: '', fecha: '', hora: '' }}
-                        onSubmit={values => console.log(values)}
+                        onSubmit={values => handleSubmit(parseInt(values.account), parseFloat(values.cantidad), parseInt(values.categoria), values.descripcion, values.fecha, values.hora, values.tipo)}
                         validationSchema={OperationsSchema}
                     >
                         {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, fecha, setFieldValue }) => (
                             <View>
-
+                                <Subheading>Información general</Subheading>
                                 <TextInput
                                     mode={"outlined"}
                                     label="Cantidad"
@@ -216,6 +223,7 @@ const AddOperationScreen = ({ navigation, route }) => {
                                             error={errors.fecha && touched.fecha ? true : false}
                                             style={{ marginTop: 10 }}
                                             right={<TextInput.Icon name="calendar" onPress={() => showDatePicker('date')} />}
+                                            editable={false}
 
                                         />
                                         {errors.fecha && touched.fecha ? (
@@ -234,7 +242,7 @@ const AddOperationScreen = ({ navigation, route }) => {
                                             error={errors.hora && touched.hora ? true : false}
                                             style={{ marginTop: 10 }}
                                             right={<TextInput.Icon name="clock" onPress={() => showDatePicker('time')} />}
-
+                                            editable={false}
                                         />
                                         {errors.hora && touched.hora ? (
                                             <HelperText type="error" visible={true}>
@@ -260,6 +268,17 @@ const AddOperationScreen = ({ navigation, route }) => {
 
                                         }} />
                                 }
+                                <Divider />
+
+
+                                <ImagePickerGallery
+                                    title={'Fotografías'}
+                                    galleryPickerEnabled={true}
+                                    cameraPickerEnabled={true}
+                                    visibleGalleryRoll={true}
+                                    pictures={pictures}
+                                    handlePictures={setPictures} />
+
                                 <Button mode='contained' onPress={handleSubmit} style={{ marginTop: 10 }}>
                                     Confirmar
                                 </Button>

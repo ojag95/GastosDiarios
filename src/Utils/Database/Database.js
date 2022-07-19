@@ -76,14 +76,14 @@ export const createDatabase = async () => {
     let promiseArray = [];
     const db = openDatabase();
     tables.forEach(table => {
-        promiseArray.push(new Promise(resolve => {
+        promiseArray.push(new Promise((resolve, reject) => {
             try {
                 console.log('[LOG] Creando tabla ', table.name)
                 db.transaction(
                     tx => {
                         tx.executeSql(table.query, [], (_, { rows }) => {
                             resolve({ table: table.name, executed: true });
-                        },(error=>console.log(error))
+                        }, (error => { reject({ table: table.name, executed: true, error: error }) })
                         );
                     },
                     null,
@@ -98,10 +98,12 @@ export const createDatabase = async () => {
         }));
     })
 
-    await Promise.all(promiseArray).then(result => {
+    return await Promise.all(promiseArray).then(result => {
         console.log('[LOG] Resultado de la creación de las tablas', result)
+        return result
     }).catch(error => {
         console.log('[Error] Se genero un error al crear la base de datos', error)
+        return error
     });
 }
 
@@ -111,22 +113,22 @@ export const createDatabase = async () => {
  */
 export const executeSQL = async (query, values) => {
     const db = openDatabase();
-    console.log('[LOG] Ejecutando query:',query)
+    console.log('[LOG] Ejecutando query:', query)
     return new Promise(resolve => {
         try {
             db.transaction(
                 tx => {
                     tx.executeSql(query, values, (_, { rows }) => {
                         console.log(JSON.stringify(rows))
-                        resolve(rows._array);
+                        resolve({executed:true,rows:rows._array});
                     }
-                    ),(txObj, error) => console.log('Error ', error);
+                    ), (txObj, error) => reject({executed:false,error:error});
                 },
                 null,
                 null
             );
         } catch (error) {
-            console.log('[Error] Error ejecutando el query:' + error);
+            return {executed:false,error:error}
         }
     });
 }

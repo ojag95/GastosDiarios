@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es-mx' // ES 2015 
 import { insertMovement } from '../../DataProvider/Movements';
 import ImagePickerGallery from '../../Components/ImagePickerGallery';
-
+import * as MediaLibrary from 'expo-media-library';
 
 dayjs.locale('es-mx')
 
@@ -26,12 +26,12 @@ const AddOperationScreen = ({ navigation, route }) => {
     const [date, setDate] = useState(new Date())
     const [visibleDatePicker, setVisibleDatePicker] = useState(false)
     const [datePickerMode, setDatePickerMode] = useState('date')
-    const [pictures, setPictures] = useState([{uri:'https://picsum.photos/600'},{uri:'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4'},{
+    const [pictures, setPictures] = useState([{ uri: 'https://picsum.photos/600' }, { uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4' }, {
         uri: "https://images.unsplash.com/photo-1573273787173-0eb81a833b34",
-      },
-      {
+    },
+    {
         uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
-      },])
+    },])
     const typeList = [{
         label: 'Ingreso',
         value: 'Ingreso'
@@ -50,17 +50,16 @@ const AddOperationScreen = ({ navigation, route }) => {
         }
     }, [])
 
+
     const getData = async () => {
         let categories = await await consultCategories()
         let accounts = await await consultAccounts()
-        console.log('CATEGORIAS', categories)
-        console.log('Cuentas', accounts)
         let categoriesCombo = []
-        categories.forEach(category => {
+        categories.rows.forEach(category => {
             categoriesCombo.push({ label: category.nombreCategoria, value: category.id.toString() })
         });
         let accountsCombo = []
-        accounts.forEach(account => {
+        accounts.rows.forEach(account => {
             accountsCombo.push({ label: account.nombreCuenta, value: account.id.toString() })
         });
         setAccountList(accountsCombo)

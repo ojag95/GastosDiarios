@@ -1,28 +1,28 @@
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import MainNavigator from './src/Navigators/MainNavigator';
 import { darkTheme, defaultTheme } from './src/Constants/Theme';
 import { useColorScheme } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { useEffect } from 'react';
-import { createDatabase, insertBaseCategories, obtenerValoresCategory, showAllTables } from './src/Utils/Database/Database';
-import { addBaseCategories, consultCategories } from './src/DataProvider/Category';
-import { addBaseAccounts, consultAccounts } from './src/DataProvider/Accounts';
-import { consultAllMovements } from './src/DataProvider/Movements';
 import InitialNavigator from './src/Navigators/InitialNavigator';
+import MainNavigator from './src/Navigators/MainNavigator';
+import OnBoardingProvider, { OnBoardingContext } from './src/Context/OnboardingContext';
+import { useContext } from 'react';
 
 export default function App() {
 
-  const colorScheme = useColorScheme();
+    const HandleNavigators=()=>{
+        let {isOnBoardingVisible,setOnBoardingVisible,setOnBoardingNoVisible} = useContext(OnBoardingContext);
+        return ( isOnBoardingVisible?<InitialNavigator/>:<MainNavigator />)
+    }
 
-  return (
-    <PaperProvider theme={colorScheme === 'light' ? defaultTheme : darkTheme}>
-      <NavigationContainer theme={colorScheme === 'light' ? defaultTheme : darkTheme}>
-        {
-        //<MainNavigator />
-        }
-        <InitialNavigator/>
-      </NavigationContainer>
-    </PaperProvider>
-  );
+    const colorScheme = useColorScheme();
+    return (
+        <OnBoardingProvider>
+            <PaperProvider theme={colorScheme === 'light' ? defaultTheme : darkTheme}>
+                <NavigationContainer theme={colorScheme === 'light' ? defaultTheme : darkTheme}>
+                    <HandleNavigators/>
+                </NavigationContainer>
+            </PaperProvider>
+        </OnBoardingProvider>
+    );
 }

@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState,useContext } from 'react'
 import LottieView from 'lottie-react-native';
 import { Headline, withTheme, ProgressBar, Colors, Caption, FAB } from 'react-native-paper';
 import { addBaseAccounts, consultAccounts } from '../../DataProvider/Accounts';
 import { addBaseCategories, consultCategories } from '../../DataProvider/Category';
 import { createDatabase, showAllTables } from '../../Utils/Database/Database';
+import { OnBoardingContext } from '../../Context/OnboardingContext';
 
 const InitializingScreen = ({ theme }) => {
+    let {setOnBoardingNoVisible} = useContext(OnBoardingContext);
     const { colors } = theme;
     const animation = useRef(null);
     const [progress, setProgress] = useState({ progress: 0, currentTask: 'Creando base de datos...' })
@@ -86,8 +88,8 @@ const InitializingScreen = ({ theme }) => {
                     style={styles.fab}
                     small={false}
                     icon="arrow-right"
-                    onPress={() => console.log('Pressed')}
                     animated
+                    onPress={()=>setOnBoardingNoVisible()}
                 />
             }
         </View>

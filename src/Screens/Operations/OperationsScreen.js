@@ -23,8 +23,15 @@ const OperationsScreen = ({ navigation, theme }) => {
     const getData = async () => {
         setIsRefreshing(true)
         let movements = await consultAllMovements();
-        setData(movements)
-        setIsRefreshing(false)
+        if(movements.executed)
+        {
+            setData(movements.rows)
+            setIsRefreshing(false)
+        }
+        else{
+            setIsRefreshing(false)
+        }
+
     }
 
 

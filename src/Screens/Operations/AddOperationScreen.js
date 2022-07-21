@@ -12,7 +12,6 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es-mx' // ES 2015 
 import { insertMovement } from '../../DataProvider/Movements';
 import ImagePickerGallery from '../../Components/ImagePickerGallery';
-import * as MediaLibrary from 'expo-media-library';
 
 dayjs.locale('es-mx')
 
@@ -32,6 +31,7 @@ const AddOperationScreen = ({ navigation, route }) => {
     {
         uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
     },])
+
     const typeList = [{
         label: 'Ingreso',
         value: 'Ingreso'
@@ -44,7 +44,6 @@ const AddOperationScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         getData();
-
         return () => {
 
         }
@@ -95,6 +94,12 @@ const AddOperationScreen = ({ navigation, route }) => {
     }
 
     const handleSubmit = async (account, cantidad, categoria, descripcion, fecha, hora, tipo) => {
+        console.log(fecha)
+        console.log(hora)
+        let dateFull=fecha+' '+hora;
+        var fechaFormatted = dayjs(dateFull);
+        let resultDate = fechaFormatted.format('DD/MM/YYYY hh:mm', 'es-mx')
+        console.log('RESULT',resultDate)
         let result = await insertMovement(account, cantidad, categoria, descripcion, fecha, hora, tipo)
         console.log(result)
         navigation.goBack()

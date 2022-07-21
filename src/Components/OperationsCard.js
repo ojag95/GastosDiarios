@@ -3,13 +3,13 @@ import React from 'react'
 import { Caption, Subheading, Surface, Title, TouchableRipple, withTheme ,Text,} from 'react-native-paper'
 import Colors from '../Constants/Colors';
 
-const OperationsCard = ({theme,data}) => {
+const OperationsCard = ({theme,data, onPress}) => {
     const {account,cantidad,categoria,descripcion,fecha,hora,tipo}=data;
     const {colors}=theme;
     return (
         <TouchableRipple
             borderless={true}
-            onPress={() => console.log('Pressed')}
+            onPress={() => onPress()}
             rippleColor="rgba(0,169,164,0.32)"
             style={styles.rippleContainer}
         >

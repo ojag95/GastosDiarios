@@ -6,6 +6,7 @@ import { addBaseAccounts, consultAccounts } from '../../DataProvider/Accounts';
 import { addBaseCategories, consultCategories } from '../../DataProvider/Category';
 import { createDatabase, showAllTables } from '../../Utils/Database/Database';
 import { OnBoardingContext } from '../../Context/OnboardingContext';
+import * as MediaLibrary from 'expo-media-library';
 
 const InitializingScreen = ({ theme }) => {
     let {setOnBoardingNoVisible} = useContext(OnBoardingContext);
@@ -15,7 +16,6 @@ const InitializingScreen = ({ theme }) => {
 
     useEffect(() => {
         handleDatabaseCreation()
-
         return () => {
 
         }

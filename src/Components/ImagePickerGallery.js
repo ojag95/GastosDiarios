@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { IconButton, Subheading, TouchableRipple } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker';
 import ImageView from "react-native-image-viewing";
+import * as MediaLibrary from 'expo-media-library';
 
 /**
  *  
@@ -11,11 +12,30 @@ import ImageView from "react-native-image-viewing";
  */
 const ImagePickerGallery = (props) => {
 
+    const [status, requestPermission] = MediaLibrary.usePermissions();
     const { title, galleryPickerEnabled, cameraPickerEnabled, visibleGalleryRoll, pictures, handlePictures } = props;
     const [visible, setIsVisible] = useState(false);
     const [state, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
     const [imageIndex, setImageIndex] = useState(0)
+
+    useEffect(() => {
+        handlePermissions()
+
+        return () => {
+
+        }
+    }, [])
+
+    const handlePermissions = async () => {
+        console.log('TEST')
+        let { status } = await requestPermission()
+        console.log(status)
+        if (status !== 'granted') {
+            alert('Debes aceptar los permisos')
+        }
+
+    }
 
     const handleAddImage = (result) => {
         let newPictures = pictures;
@@ -41,24 +61,34 @@ const ImagePickerGallery = (props) => {
             }
             let result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
+                allowsEditing: false,
                 aspect: [1, 1],
                 quality: 1,
             });
             console.log(result);
 
             if (!result.cancelled) {
+                //Almacena el Asset en la galeria
+                let newAsset = await MediaLibrary.createAssetAsync(result.uri)
+                let resultadoCreacion = await MediaLibrary.createAlbumAsync('Gastos diarios', newAsset)
+                console.log('Resultado', resultadoCreacion);
+                //Establece el asset en la APP
                 handleAddImage(result)
             }
         } else {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
-                allowsEditing: true,
+                allowsEditing: false,
                 aspect: [1, 1],
                 quality: 1,
             });
             console.log(result);
             if (!result.cancelled) {
+                //Almacena el Asset en la galeria
+                let newAsset = await MediaLibrary.createAssetAsync(result.uri)
+                let resultadoCreacion = await MediaLibrary.createAlbumAsync('Gastos diarios', newAsset)
+                console.log('Resultado', resultadoCreacion)
+                //Establece el asset en la APP
                 handleAddImage(result)
             }
         }

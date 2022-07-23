@@ -9,7 +9,9 @@ export const defaultTheme = {
       ...DefaultTheme.colors,
       primary: Colors.Primary,
       accent: Colors.Accent,
-      background: "#fff"
+      background: "#fff",
+      accentWithOpacity:Colors.AccentWithOpacity,
+      error:Colors.Red
     },
   };
 

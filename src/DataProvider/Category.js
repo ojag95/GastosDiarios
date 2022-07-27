@@ -15,6 +15,30 @@ export const addBaseCategories=async()=>{
         
 }
 
+export const insertCategory = async (nombreCategoria,description) => {
+    let query='Insert into category (nombreCategoria,icon,description) values(?,"",?);'
+    let data = [nombreCategoria, description];
+    let result = await executeSQL(query, data);
+    console.log(result)
+    return result;
+}
+
+export const editCategory = async (id,nombreCategoria,description) => {
+    let query='update category set nombreCategoria=?,description=? where id=?;'
+    let data = [nombreCategoria, description,id];
+    let result = await executeSQL(query, data);
+    console.log(result)
+    return result;
+}
+
+export const delecteCategory = async (id) => {
+    let query='delete from category where id=?;'
+    let data = [id];
+    let result = await executeSQL(query, data);
+    console.log(result)
+    return result;
+}
+
 export const consultCategories=async()=>{
     let query='SELECT * FROM category;'
     let data=[];

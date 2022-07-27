@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Avatar, Appbar, withTheme, Headline, List } from 'react-native-paper';
 
-const ProfileScreen = ({ theme }) => {
+const ProfileScreen = ({ theme,navigation }) => {
     const { colors } = theme;
     return (
         <View style={styles.container}>
@@ -26,7 +26,7 @@ const ProfileScreen = ({ theme }) => {
                         <List.Item
                             title="Mi Perfil"
                             description="Configure opciones relacionadas a su cuenta"
-                            onPress={() => console.log('Presionado')}
+                            onPress={() => navigation.navigate('ProfileSettingsScreen')}
                             left={props => <List.Icon {...props} icon="account" />}
                         />
                     </List.Section>
@@ -35,7 +35,7 @@ const ProfileScreen = ({ theme }) => {
                         <List.Item
                             title="Categorías"
                             description="Agregue o modifique Categorías"
-                            onPress={() => console.log('Presionado')}
+                            onPress={() => navigation.navigate('CategoriesScreen')}
                             left={props => <List.Icon {...props} icon="file-tree" />}
                         />
                         <List.Item
